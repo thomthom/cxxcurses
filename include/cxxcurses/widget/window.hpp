@@ -20,7 +20,7 @@ namespace cxxcurses::widget
 class window_interface : public widget_interface
 {
 public:
-    virtual void get_char() const = 0;
+    virtual int get_char() const = 0;
     [[nodiscard]] virtual auto current_yx() const noexcept
         -> std::pair<int, int> = 0;
     [[nodiscard]] virtual auto max_yx() const noexcept
@@ -42,9 +42,9 @@ public:
         wrefresh( stdscr );
     }
 
-    void get_char() const override
+    int get_char() const override
     {
-        wgetch( stdscr );
+        return wgetch( stdscr );
     }
 
     [[nodiscard]] auto current_yx() const noexcept
@@ -132,11 +132,11 @@ public:
         }
     }
 
-    void get_char() const override
+    int get_char() const override
     {
         hook_.refresh();
         this->refresh();
-        wgetch( raw_window_.get() );
+        return wgetch( raw_window_.get() );
     }
 
     [[nodiscard]] auto get() const -> raw::window_ptr override
